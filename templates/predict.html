@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict</title>
+    <style>
+        body {
+            background-color: #f0f8ff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: #333;
+        }
+
+        .main {
+            margin-top: 50px;
+            background: white;
+            padding: 30px 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+
+        h1 {
+            color: #0066cc;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 250px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #4dc3ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #33aaff;
+        }
+
+        p {
+            font-size: 20px;
+            color: green;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <p>WELCOME TO PREDICTION PAGE!</p>
+    <div align="center" class="main">
+        <h1>Please Enter The Following Information:</h1>
+        <form action="result">
+            <label>Pregnancies</label>
+            <input type="text" name="n1">
+
+            <label>Glucose</label>
+            <input type="text" name="n2">
+
+            <label>Blood Pressure</label>
+            <input type="text" name="n3">
+
+            <label>Skin Thickness</label>
+            <input type="text" name="n4">
+
+            <label>Insulin</label>
+            <input type="text" name="n5">
+
+            <label>BMI</label>
+            <input type="text" name="n6">
+
+            <label>Diabetes Pedigree Function</label>
+            <input type="text" name="n7">
+
+            <label>Age</label>
+            <input type="text" name="n8">
+
+            <input type="submit" value="Predict">
+        </form>
+
+        <p>Result: {{ result2 }}</p>
+    </div>
+</body>
+</html>
