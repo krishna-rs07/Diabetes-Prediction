@@ -2,6 +2,8 @@ from django.shortcuts import render
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+import os
+from django.conf import settings
 
 
 def home(request):
@@ -13,23 +15,22 @@ def predict(request):
 
 
 def result(request):
-    # Load the dataset
-    import os
-    from django.conf import settings
-
-    data_path = os.path.join(settings.BASE_DIR, 'data', 'diabetes.csv')
+    # ✅ Corrected CSV path
+    data_path = os.path.join(settings.BASE_DIR, 'diabetes.csv')
     data = pd.read_csv(data_path)
-
-
 
     # Split data
     X = data.drop("Outcome", axis=1)
     Y = data["Outcome"]
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, stratify=Y, random_state=2)
+    X_train, X_test, Y_train, Y_test = train_test_split(
+        X, Y, test_size=0.2, stratify=Y, random_state=2
+    )
+
     # Train the model
     model = LogisticRegression(max_iter=200)
     model.fit(X_train, Y_train)
-   # Get input values from the user
+
+    # Get input values from the user
     val1 = float(request.GET['n1'])
     val2 = float(request.GET['n2'])
     val3 = float(request.GET['n3'])
@@ -50,3 +51,4 @@ def result(request):
 
     # Return result to template
     return render(request, 'predict.html', {'result2': result1})
+
