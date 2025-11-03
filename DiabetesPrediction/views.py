@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 import os
@@ -17,6 +18,12 @@ def predict(request):
 def result(request):
     # ✅ Corrected CSV path
     data_path = os.path.join(settings.BASE_DIR, 'diabetes.csv')
+
+    # ✅ Check if file exists (prevents 500 errors)
+    if not os.path.exists(data_path):
+        return render(request, 'predict.html', {'result2': '❌ Dataset not found!'})
+
+    # Load dataset
     data = pd.read_csv(data_path)
 
     # Split data
@@ -26,29 +33,21 @@ def result(request):
         X, Y, test_size=0.2, stratify=Y, random_state=2
     )
 
-    # Train the model
+    # Train model
     model = LogisticRegression(max_iter=200)
     model.fit(X_train, Y_train)
 
-    # Get input values from the user
-    val1 = float(request.GET['n1'])
-    val2 = float(request.GET['n2'])
-    val3 = float(request.GET['n3'])
-    val4 = float(request.GET['n4'])
-    val5 = float(request.GET['n5'])
-    val6 = float(request.GET['n6'])
-    val7 = float(request.GET['n7'])
-    val8 = float(request.GET['n8'])
+    # Get user inputs safely
+    try:
+        vals = [float(request.GET[f'n{i}']) for i in range(1, 9)]
+    except (KeyError, ValueError):
+        return render(request, 'predict.html', {'result2': '⚠️ Invalid input values!'})
 
-    # Make prediction
-    pred = model.predict([[val1, val2, val3, val4, val5, val6, val7, val8]])
+    # ✅ Make prediction with numpy (removes sklearn warning)
+    pred = model.predict(np.array([vals]))
 
-    # Determine result
-    if pred[0] == 1:
-        result1 = "Diabetic"
-    else:
-        result1 = "Not Diabetic"
+    # Output result
+    result1 = "Diabetic" if pred[0] == 1 else "Not Diabetic"
 
     # Return result to template
     return render(request, 'predict.html', {'result2': result1})
-
