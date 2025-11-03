@@ -14,7 +14,13 @@ def predict(request):
 
 def result(request):
     # Load the dataset
-    data = pd.read_csv(r"C:\Users\krishna\OneDrive\Desktop\diabetes.csv")
+    import os
+    from django.conf import settings
+
+    data_path = os.path.join(settings.BASE_DIR, 'data', 'diabetes.csv')
+    data = pd.read_csv(data_path)
+
+
 
     # Split data
     X = data.drop("Outcome", axis=1)
